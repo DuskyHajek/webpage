@@ -282,248 +282,15 @@ body {
     .nav-toggle {
         display: block;
     }
-    
-    /* Improve mobile menu appearance */
-    .fullscreen-menu {
-        background: rgba(5, 5, 16, 0.95);
-    }
-    
-    .menu-item {
-        font-size: 1.8rem;
-        margin-bottom: 20px;
-    }
-    
-    /* Adjust profile card for mobile */
-    .profile-card {
-        flex-direction: column;
-        padding: 20px;
-    }
-    
-    .profile-image {
-        width: 150px;
-        height: 150px;
-        margin: 0 auto 20px;
-    }
-    
-    /* Adjust contact container for mobile */
-    .contact-container {
-        flex-direction: column;
-    }
-    
-    .social-links {
-        margin-top: 30px;
-        width: 100%;
-    }
-    
-    /* Make scroll indicator more visible on mobile */
-    .scroll-indicator {
-        opacity: 1;
-        bottom: 15px;
-    }
-    
-    .mobile-nav-buttons {
-        opacity: 1;
-        pointer-events: auto;
-    }
-}
-
-@media (max-width: 768px) {
-    /* Improve timeline for mobile */
-    .timeline-container {
-        padding: 10px;
-    }
-    
-    .timeline-events {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-    
-    .timeline-event {
-        margin-bottom: 15px;
-    }
-    
-    /* Adjust hero content for mobile */
-    .glitch {
-        font-size: 3rem;
-    }
-    
-    .typewriter {
-        font-size: 1rem;
-    }
-    
-    /* Improve menu items for mobile */
-    .menu-item {
-        font-size: 1.5rem;
-    }
-    
-    /* Better section content padding for mobile */
-    .section-content {
-        padding: 20px 15px;
-    }
-    
-    /* Adjust profile info for mobile */
-    .profile-info h2 {
-        font-size: 1.8rem;
-    }
-    
-    /* Improve project cards for mobile */
-    .portfolio-showcase {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    /* Improve form elements for mobile */
-    .form-group input,
-    .form-group textarea {
-        font-size: 16px; /* Prevents iOS zoom on focus */
-    }
-    
-    /* Make scroll indicator more mobile-friendly */
-    .scroll-indicator {
-        bottom: 10px;
-    }
-    
-    .scroll-arrow {
-        width: 25px;
-        height: 40px;
-    }
-    
-    /* Improve section transitions for mobile */
-    section.active {
-        transform: translateY(0) scale(1);
-        transition: transform 0.6s ease, opacity 0.6s ease;
-    }
 }
 
 @media (max-width: 576px) {
-    /* Further adjustments for smaller screens */
-    .glitch {
-        font-size: 2.5rem;
-    }
-    
-    .typewriter {
-        font-size: 0.9rem;
-    }
-    
-    .menu-item {
-        font-size: 1.3rem;
-        margin-bottom: 15px;
-    }
-    
-    /* Tighter padding for very small screens */
-    .section-content {
-        padding: 15px 10px;
-        margin: 10px;
-    }
-    
-    .profile-info h2 {
-        font-size: 1.5rem;
-    }
-    
-    .modal-body {
-        padding: 15px;
-    }
-    
-    /* Improve navigation for small screens */
     .main-nav {
-        padding: 15px;
+        padding: 15px 20px;
     }
     
     .nav-logo {
         font-size: 1.5rem;
-    }
-    
-    /* Better touch targets for mobile */
-    .nav-toggle {
-        padding: 10px;
-    }
-    
-    .hamburger {
-        width: 25px;
-        height: 20px;
-    }
-    
-    /* Improve project cards for small screens */
-    .project-card {
-        height: 200px;
-    }
-    
-    /* Adjust social links for mobile */
-    .social-links-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-    }
-    
-    /* Make form buttons easier to tap */
-    .submit-btn {
-        padding: 12px 20px;
-        font-size: 1rem;
-    }
-    
-    /* Improve scroll indicator for very small screens */
-    .scroll-indicator {
-        bottom: 5px;
-    }
-    
-    .scroll-text {
-        font-size: 0.7rem;
-    }
-    
-    .scroll-arrow {
-        width: 20px;
-        height: 35px;
-    }
-    
-    /* Adjust timeline for small screens */
-    .timeline-event-content {
-        padding: 10px;
-    }
-    
-    .timeline-title {
-        font-size: 1rem;
-    }
-    
-    .timeline-date {
-        font-size: 0.8rem;
-    }
-}
-
-/* Add touch-friendly improvements */
-@media (hover: none) {
-    /* Disable hover effects that might cause issues on touch devices */
-    .project-card:hover .project-overlay {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    
-    .project-overlay {
-        opacity: 0.9;
-        transform: translateY(0);
-        background: rgba(5, 5, 16, 0.8);
-    }
-    
-    /* Make buttons more touch-friendly */
-    .cta-button, 
-    .submit-btn,
-    .social-link,
-    .nav-link,
-    .menu-item {
-        padding: 12px 20px;
-    }
-    
-    /* Disable cursor follower on touch devices */
-    .cursor-follower {
-        display: none;
-    }
-    
-    /* Improve touch targets */
-    .timeline-event-content,
-    .project-card,
-    .social-link,
-    .nav-toggle,
-    .modal-close {
-        min-height: 44px;
-        min-width: 44px;
     }
 }
 
@@ -1128,7 +895,7 @@ section.zoom-in {
     }
     
     .menu-item {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
     
     .section-content {
@@ -1150,7 +917,7 @@ section.zoom-in {
     }
     
     .menu-item {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
         margin: 20px 0;
     }
     
@@ -1159,7 +926,7 @@ section.zoom-in {
     }
     
     .profile-info h2 {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
     
     .modal-body {
@@ -1331,14 +1098,6 @@ section.zoom-in {
     transform: translateY(0) translateZ(0) scale(0.98);
     box-shadow: var(--glow-small);
     transition: all 0.1s ease;
-}
-
-.cta-button i {
-    transition: transform 0.3s ease;
-}
-
-.cta-button:hover i {
-    transform: translateX(5px) rotate(10deg);
 }
 
 /* About Section */
@@ -2092,65 +1851,4 @@ section.zoom-in {
 .timeline-event-content:hover::after {
     background: white;
     box-shadow: var(--glow-small);
-}
-
-/* Mobile Navigation Buttons */
-.mobile-nav-buttons {
-    position: fixed;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    z-index: 90;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-
-.mobile-nav-prev,
-.mobile-nav-next {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: var(--glow-small);
-    transition: all 0.3s ease;
-}
-
-.mobile-nav-prev:hover,
-.mobile-nav-next:hover {
-    background: rgba(0, 255, 255, 0.2);
-    transform: scale(1.1);
-}
-
-.mobile-nav-prev:active,
-.mobile-nav-next:active {
-    transform: scale(0.95);
-}
-
-@media (max-width: 992px) {
-    .mobile-nav-buttons {
-        opacity: 1;
-        pointer-events: auto;
-    }
-}
-
-@media (max-width: 576px) {
-    .mobile-nav-buttons {
-        right: 10px;
-    }
-    
-    .mobile-nav-prev,
-    .mobile-nav-next {
-        width: 35px;
-        height: 35px;
-    }
 }

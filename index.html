@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>duskyAI | Exploring the Future</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -150,32 +150,6 @@
             0% { top: 8px; opacity: 1; }
             80% { opacity: 0; }
             100% { top: 32px; opacity: 0; }
-        }
-        
-        /* Mobile improvements */
-        @media (max-width: 768px) {
-            .scroll-indicator {
-                display: flex;
-                opacity: 1;
-            }
-            
-            .project-card {
-                position: relative;
-            }
-            
-            .project-card::after {
-                content: 'Tap to view';
-                position: absolute;
-                bottom: 10px;
-                right: 10px;
-                background: rgba(0, 0, 0, 0.6);
-                color: white;
-                padding: 5px 10px;
-                border-radius: 4px;
-                font-size: 0.7rem;
-                pointer-events: none;
-                opacity: 0.7;
-            }
         }
     </style>
 </head>
@@ -372,59 +346,6 @@
         </div>
     </div>
 
-    <!-- Mobile section navigation buttons -->
-    <div class="mobile-nav-buttons">
-        <button class="mobile-nav-prev" aria-label="Previous Section">
-            <i class="fas fa-chevron-up"></i>
-        </button>
-        <button class="mobile-nav-next" aria-label="Next Section">
-            <i class="fas fa-chevron-down"></i>
-        </button>
-    </div>
-
     <script src="script.js"></script>
-    <script>
-        // Add mobile-specific enhancements
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if mobile
-            const isMobile = window.innerWidth <= 992;
-            
-            if (isMobile) {
-                // Handle mobile navigation buttons
-                const prevButton = document.querySelector('.mobile-nav-prev');
-                const nextButton = document.querySelector('.mobile-nav-next');
-                const sectionIds = ['hero', 'about', 'portfolio', 'timeline', 'contact'];
-                
-                prevButton.addEventListener('click', function() {
-                    const currentIndex = sectionIds.indexOf(currentSection);
-                    if (currentIndex > 0) {
-                        navigateToSection(sectionIds[currentIndex - 1]);
-                    }
-                });
-                
-                nextButton.addEventListener('click', function() {
-                    const currentIndex = sectionIds.indexOf(currentSection);
-                    if (currentIndex < sectionIds.length - 1) {
-                        navigateToSection(sectionIds[currentIndex + 1]);
-                    }
-                });
-                
-                // Update button visibility based on current section
-                function updateNavButtons() {
-                    const currentIndex = sectionIds.indexOf(currentSection);
-                    prevButton.style.opacity = currentIndex > 0 ? '1' : '0.3';
-                    nextButton.style.opacity = currentIndex < sectionIds.length - 1 ? '1' : '0.3';
-                }
-                
-                // Initial update
-                updateNavButtons();
-                
-                // Listen for section changes
-                document.addEventListener('sectionChanged', function(e) {
-                    updateNavButtons();
-                });
-            }
-        });
-    </script>
 </body>
 </html>
