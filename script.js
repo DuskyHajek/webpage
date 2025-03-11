@@ -179,6 +179,14 @@ let mouseX = 0;
 let mouseY = 0;
 let cursorX = 0;
 let cursorY = 0;
+let isMobile = window.innerWidth <= 992; // Check if device is mobile
+let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+// Function to check if device is mobile
+function checkMobile() {
+    isMobile = window.innerWidth <= 992;
+    return isMobile;
+}
 
 // Create section indicators dynamically
 const createSectionIndicators = () => {
@@ -354,6 +362,9 @@ class Particle {
 const particlesMap = new Map();
 
 function initAllParticles() {
+    // Reduce particle count on mobile for better performance
+    const mobileFactor = isMobile ? 0.5 : 1;
+    
     // Initialize particles for each canvas
     Object.keys(particleCanvases).forEach(key => {
         const canvas = particleCanvases[key];
@@ -365,13 +376,13 @@ function initAllParticles() {
             const particles = [];
             
             // Add normal moving particles
-            for (let i = 0; i < settings.count; i++) {
+            for (let i = 0; i < Math.floor(settings.count * mobileFactor); i++) {
                 particles.push(new Particle(canvas, settings));
             }
             
             // Add fixed particles for patterns
             if (['grid', 'dots'].includes(settings.pattern)) {
-                const fixedParticleCount = Math.floor(settings.count * 0.4);
+                const fixedParticleCount = Math.floor(Math.floor(settings.count * mobileFactor) * 0.4);
                 const fixedParticles = [];
                 
                 for (let i = 0; i < fixedParticleCount; i++) {
@@ -561,83 +572,86 @@ navToggle.addEventListener('click', () => {
     document.body.classList.toggle('menu-open');
 });
 
-// Enhanced section transitions with animation effects
+// Navigate to section with improved mobile handling
 function navigateToSection(sectionId) {
     if (isTransitioning || currentSection === sectionId) return;
-    isTransitioning = true;
     
-    // Get direction of transition
-    const sectionIds = ['hero', 'about', 'portfolio', 'timeline', 'contact'];
-    const currentIndex = sectionIds.indexOf(currentSection);
-    const targetIndex = sectionIds.indexOf(sectionId);
-    const direction = targetIndex > currentIndex ? 'down' : 'up';
-    
-    // Get current and target sections
-    const fromSection = document.getElementById(currentSection);
-    const toSection = document.getElementById(sectionId);
-    
-    // Set animation classes based on direction
-    if (direction === 'down') {
-        fromSection.classList.add('slide-out-up');
-        toSection.classList.add('slide-in-down');
-    } else {
-        fromSection.classList.add('slide-out-down');
-        toSection.classList.add('slide-in-up');
+    // Close mobile menu if open
+    if (fullscreenMenu.classList.contains('active')) {
+        toggleMenu();
     }
     
-    // Make target section visible (but not active yet so animations work)
-    toSection.style.visibility = 'visible';
-    toSection.style.opacity = '1';
+    isTransitioning = true;
     
-    // Wait for animations to complete
-    setTimeout(() => {
-        // Update section classes
-        fromSection.classList.remove('active');
-        fromSection.classList.remove('slide-out-up', 'slide-out-down');
+    // Update current section
+    const prevSection = currentSection;
+    currentSection = sectionId;
+    
+    // Update section indicator
+    updateSectionIndicator(sectionId);
+    
+    // Update active nav link
+    updateActiveNavLink(sectionId);
+    
+    // Update nav progress
+    updateNavProgress(sectionId);
+    
+    // Get the current and target sections
+    const currentSectionElement = document.getElementById(prevSection);
+    const targetSectionElement = document.getElementById(sectionId);
+    
+    // Determine the direction of transition
+    const sectionOrder = ['hero', 'about', 'portfolio', 'timeline', 'contact'];
+    const currentIndex = sectionOrder.indexOf(prevSection);
+    const targetIndex = sectionOrder.indexOf(sectionId);
+    const direction = targetIndex > currentIndex ? 'down' : 'up';
+    
+    // Apply transition classes based on direction
+    if (direction === 'down') {
+        currentSectionElement.classList.add('slide-out-up');
+        targetSectionElement.classList.add('slide-in-down');
+    } else {
+        currentSectionElement.classList.add('slide-out-down');
+        targetSectionElement.classList.add('slide-in-up');
+    }
+    
+    // Make the target section active
+    targetSectionElement.classList.add('active');
+    
+    // If timeline section, ensure it's properly initialized
+    if (sectionId === 'timeline') {
+        animateTimelineEvents();
         
-        toSection.classList.add('active');
-        toSection.classList.remove('slide-in-down', 'slide-in-up');
-        
-        // Reset visibility for transition animations
-        fromSection.style.visibility = '';
-        fromSection.style.opacity = '';
-        
-        // Update current section tracking
-        currentSection = sectionId;
-        
-        // Update section indicator
-        updateSectionIndicator(sectionId);
-        
-        // Update active nav link
-        updateActiveNavLink(sectionId);
-        
-        // Update navigation progress
-        updateNavProgress(sectionId);
-        
-        // Close menu if open
-        navToggle.classList.remove('active');
-        fullscreenMenu.classList.remove('active');
-        document.body.classList.remove('menu-open');
-        
-        // Dispatch custom event for section change
-        document.dispatchEvent(new CustomEvent('sectionChange', { 
-            detail: { sectionId: sectionId } 
-        }));
-        
-        // If timeline section, check if we need to initialize timeline
-        if (sectionId === 'timeline') {
-            animateTimelineEvents();
-            
-            // Ensure the timeline is scrollable from the start
-            const timelineContainer = document.querySelector('.timeline-container');
-            if (timelineContainer) {
-                timelineContainer.scrollLeft = 0;
-            }
+        // Ensure the timeline is scrollable from the start
+        const timelineContainer = document.querySelector('.timeline-container');
+        if (timelineContainer) {
+            timelineContainer.scrollLeft = 0;
         }
-        
-        // End transition state
+    }
+    
+    // Adjust transition speed for mobile
+    const transitionDuration = isMobile ? 600 : 800; // Faster transitions on mobile
+    
+    // Remove transition classes after animation completes
+    setTimeout(() => {
+        currentSectionElement.classList.remove('active', 'slide-out-up', 'slide-out-down');
+        targetSectionElement.classList.remove('slide-in-down', 'slide-in-up');
         isTransitioning = false;
-    }, 1000); // Match the animation duration
+        
+        // Dispatch a custom event for section change
+        const sectionChangedEvent = new CustomEvent('sectionChanged', {
+            detail: { 
+                prevSection: prevSection,
+                currentSection: sectionId
+            }
+        });
+        document.dispatchEvent(sectionChangedEvent);
+    }, transitionDuration); // Use the adjusted transition duration
+    
+    // Scroll to top on mobile when changing sections
+    if (isMobile) {
+        window.scrollTo(0, 0);
+    }
 }
 
 // Menu item click handlers
@@ -795,6 +809,7 @@ window.addEventListener('resize', () => {
         }
     });
     
+    checkMobile();
     initAllParticles();
 });
 
@@ -1018,23 +1033,31 @@ function handleNavScroll() {
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if mobile
+    checkMobile();
+    
+    // Initialize particles with reduced count on mobile
+    initAllParticles();
+    
     // Create section indicators
     createSectionIndicators();
     
-    // Create page transition element
+    // Create page transition
     const pageTransition = createPageTransition();
     
-    // Initialize particles
-    initAllParticles();
-    
-    // Populate timeline events
+    // Initialize timeline
     populateTimelineEvents();
-    
-    // Initialize timeline navigation
+    animateTimelineEvents();
     initTimelineNavigation();
     
-    // Create parallax elements for each section
+    // Create parallax elements
     createParallaxElements();
+    
+    // Initialize project cards with touch support
+    initProjectCards();
+    
+    // Handle mobile navigation
+    handleScroll();
     
     // Update scroll indicator visibility
     updateScrollIndicator();
@@ -1062,19 +1085,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start animation loop
     animateAllParticles();
     
-    // Set up navigation toggle
-    navToggle.addEventListener('click', () => {
-        navToggle.classList.toggle('active');
-        fullscreenMenu.classList.toggle('active');
-    });
+    // Toggle menu
+    navToggle.addEventListener('click', toggleMenu);
     
-    // Set up menu item navigation
+    // Menu item click
     menuItems.forEach(item => {
         item.addEventListener('click', () => {
-            const sectionId = item.getAttribute('data-section');
-            navigateToSection(sectionId);
-            navToggle.classList.remove('active');
-            fullscreenMenu.classList.remove('active');
+            const section = item.getAttribute('data-section');
+            navigateToSection(section);
         });
     });
     
@@ -1085,19 +1103,6 @@ document.addEventListener('DOMContentLoaded', () => {
             navigateToSection(sectionId);
         });
     }
-    
-    // Set up project card links
-    projectCards.forEach(card => {
-        card.addEventListener('click', () => {
-            const projectId = card.getAttribute('data-project');
-            const projectUrl = card.getAttribute('data-url');
-            
-            // Open the URL in a new tab if data-url attribute exists
-            if (projectUrl) {
-                window.open(projectUrl, '_blank');
-            }
-        });
-    });
     
     // The modal is no longer used, but the code is kept for reference
     // Close modal
@@ -1380,4 +1385,83 @@ function updateNavProgress(sectionId) {
     const progress = (currentIndex / (sectionIds.length - 1)) * 100;
     
     progressBar.style.width = `${progress}%`;
+}
+
+// Improve touch handling for project cards
+function initProjectCards() {
+    projectCards.forEach(card => {
+        const projectId = card.getAttribute('data-project');
+        
+        // For touch devices, use tap to show overlay and double tap to open
+        if (isTouchDevice) {
+            let lastTap = 0;
+            
+            card.addEventListener('touchstart', function(e) {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                
+                if (tapLength < 500 && tapLength > 0) {
+                    // Double tap detected - open project
+                    openProjectModal(projectId);
+                    e.preventDefault();
+                }
+                
+                lastTap = currentTime;
+            });
+        } else {
+            // For non-touch devices, use click to open
+            card.addEventListener('click', () => {
+                openProjectModal(projectId);
+            });
+        }
+    });
+}
+
+// Improve mobile menu toggle
+function toggleMenu() {
+    navToggle.classList.toggle('active');
+    fullscreenMenu.classList.toggle('active');
+    
+    // Prevent body scrolling when menu is open
+    if (fullscreenMenu.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = '';
+    }
+}
+
+// Improve scroll handling for mobile
+function handleScroll() {
+    if (isMobile) {
+        // Implement touch-friendly scrolling between sections
+        let touchStartY = 0;
+        let touchEndY = 0;
+        const minSwipeDistance = 50;
+        
+        document.addEventListener('touchstart', function(e) {
+            touchStartY = e.changedTouches[0].screenY;
+        }, false);
+        
+        document.addEventListener('touchend', function(e) {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, false);
+        
+        function handleSwipe() {
+            const distance = touchStartY - touchEndY;
+            
+            if (Math.abs(distance) < minSwipeDistance) return;
+            
+            const sectionIds = ['hero', 'about', 'portfolio', 'timeline', 'contact'];
+            const currentIndex = sectionIds.indexOf(currentSection);
+            
+            if (distance > 0 && currentIndex < sectionIds.length - 1) {
+                // Swipe up - go to next section
+                navigateToSection(sectionIds[currentIndex + 1]);
+            } else if (distance < 0 && currentIndex > 0) {
+                // Swipe down - go to previous section
+                navigateToSection(sectionIds[currentIndex - 1]);
+            }
+        }
+    }
 }
